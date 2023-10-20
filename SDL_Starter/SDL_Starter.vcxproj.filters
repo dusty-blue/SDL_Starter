@@ -18,10 +18,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
+    <ClCompile Include="WindowController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WindowController.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,6 +41,18 @@
   <ItemGroup>
     <Image Include="bitmap1.bmp">
       <Filter>Resource Files\Images</Filter>
+    </Image>
+    <Image Include="bitmap2.bmp">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
+    <Image Include="red_circle.bmp">
+      <Filter>Resource Files\Images</Filter>
+    </Image>
+    <Image Include="bitmap3.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="bitmap4.bmp">
+      <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
 </Project>
