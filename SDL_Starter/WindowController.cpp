@@ -15,7 +15,15 @@ WindowController::WindowController(int width, int height):SCREEN_WIDTH(width), S
     if (window)
     {
         windowID = SDL_GetWindowID(window);
-        screenSurface = SDL_GetWindowSurface(window);
+        //screenSurface = SDL_GetWindowSurface(window);
+        renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_ACCELERATED);
+        if (renderer) {
+            SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+        }
+        else {
+            printf("Creating Renderer Failed. SDL_Error: %s\n", SDL_GetError());
+        }
 
     }
     else {
@@ -28,7 +36,9 @@ WindowController::~WindowController()
 {
     SDL_FreeSurface(loadedImg);
     loadedImg = NULL;
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    renderer = NULL;
     window = NULL;
 }
 
@@ -60,16 +70,37 @@ SDL_Surface* WindowController::loadSurface(std::string path) {
     }
 }
 
+SDL_Surface * WindowController::loadSurface(SDL_Surface * input)
+{
+    SDL_Surface* surface = NULL;
+    surface = SDL_ConvertSurface(input, screenSurface->format, 0);
+    if (surface) {
+        return surface;
+    }
+    else {
+        printf("Unable to create converted surface. Error: %s\n", SDL_GetError());
+        //TO DO add default surface
+        std::cin.get();
+    }
+    return nullptr;
+}
+
 void WindowController::showSurface(SDL_Surface* surface) {
+
     SDL_Rect stretchRect;
     stretchRect.x = 0;
     stretchRect.y = 0;
     stretchRect.w = SCREEN_WIDTH;
     stretchRect.h = SCREEN_HEIGHT;
 
-
-    SDL_BlitScaled(surface,NULL,screenSurface,&stretchRect);
-    SDL_UpdateWindowSurface(window);
+    if (surface) {
+        SDL_BlitScaled(loadSurface(surface), NULL, screenSurface, &stretchRect);
+        SDL_UpdateWindowSurface(window);
+    }
+    else {
+        std::cout << "Input was a null ptr. ts ts ts\n";
+    }
+    
 }
 
 void WindowController::showRedCircle(int x, int y) {

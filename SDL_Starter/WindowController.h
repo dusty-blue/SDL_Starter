@@ -9,6 +9,7 @@ public:
     SDL_Surface* loadBMP(std::string mediaLocation);
     void loadMedia(std::string mediaLocation);
     SDL_Surface * loadSurface(std::string path);
+    SDL_Surface* loadSurface(SDL_Surface* input);
     void showSurface(SDL_Surface * surface);
     void showRedCircle(int x, int y);
     void update();
@@ -18,6 +19,7 @@ public:
 private:
     SDL_Window* window;
     SDL_Surface* screenSurface;
+    SDL_Renderer* renderer;
     SDL_Surface* loadedImg;
     const int SCREEN_WIDTH;
     const int SCREEN_HEIGHT;

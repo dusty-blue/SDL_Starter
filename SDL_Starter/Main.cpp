@@ -5,28 +5,71 @@ using namespace std;
 #include <SDL.h>
 #include "WindowController.h"
 #include <map>
+#include <SDL_image.h>
+#include <functional>
+#include "MediaManager.h"
 
 void cleanUp() {
     std::cout<< "Let me just ge my broom...\n";
+    IMG_Quit();
     SDL_Quit();
 }
 
+bool init() {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        printf("Video subsytem intialisation failed. SDL_Error: %s\n", SDL_GetError());
+        return false;
+    }
+    if (IMG_Init(IMG_INIT_PNG) == 0) {
+        printf("Failed to intialise PNG library. SDL_Error %s\n",SDL_GetError());
+        return false;
+    } 
+    
+    return true;
+}
 
+void printIK (int i, int k) {
+    std::cout << i << "+" << k << "=" << (k + i) << "\n";
+};
 
+void printKey(SDL_KeyCode k) {
+    
+    std::cout << SDL_GetKeyName(k) << " is great!\n";
+}
+
+void assignKeybind(SDL_Event e, SDL_KeyCode k) {
+    if (e.key.keysym.sym == k) {
+        printKey(k);
+    }
+}
 int main(int argc, char* args[]) {
     /*int a = 12;
     cout<< to_string(a)<< "hi!" << '\n';
     char input;
     cin>>input;*/
     std::atexit(cleanUp);
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    //auto customA =customFun(2);
+    int a = 5;
+    auto printI = [&a](auto b) { printIK(b, a);};
+    a =6;
+    printI(3);
+    std::function<void()> printMe = [] {printKey(SDLK_u);};
+    
+    
+    
+
+
+    if (!init()) {
         printf("T_T i cry coz SDL_Error: %s\n", SDL_GetError());
     } 
     else {
         std::map<int,WindowController*> ctrlMap;
         WindowController winCtrl(640, 480);
         ctrlMap.insert({winCtrl.windowID,&winCtrl});
-        winCtrl.loadMedia("bitmap1.bmp");
+        MediaManager MediaManager;
+
+        //winCtrl.loadMedia("bitmap3.bmp");
+        winCtrl.showSurface(MediaManager.loadPNG("Pixil-Frame-1.png"));
         /*WindowController winCtrl2(100,100);
         ctrlMap.insert({winCtrl2.windowID,&winCtrl2});
         
@@ -39,8 +82,8 @@ int main(int argc, char* args[]) {
         Coords redCircleCoords;
         winCtrl.showRedCircle(redCircleCoords.x,redCircleCoords.y);
         SDL_Event e;
-        
-        cout<< "found it\n";
+        std::function<void(SDL_Event)> boundKeyF =[](SDL_Event e) {assignKeybind(e, SDLK_u);};
+
         while (SDL_WaitEvent(&e) != 0) {
             switch (e.type)
             {
@@ -61,6 +104,7 @@ int main(int argc, char* args[]) {
 
                 switch (e.key.keysym.sym) {
                     case SDLK_w:
+                    
                     redCircleCoords.y -= 1;
                     winCtrl.showRedCircle(redCircleCoords.x,redCircleCoords.y);
                     break;
@@ -76,6 +120,13 @@ int main(int argc, char* args[]) {
                     redCircleCoords.x -= 1;
                     winCtrl.showRedCircle(redCircleCoords.x, redCircleCoords.y);
                     break;
+                    case SDLK_p:
+                    //printMe = [] {printKey(SDLK_i); };
+                    boundKeyF = [](SDL_Event e) { assignKeybind(e,SDLK_i);};
+                    break;
+                    case SDLK_z:
+                    printMe();
+                    break;
                 }
 
 
@@ -87,7 +138,7 @@ int main(int argc, char* args[]) {
                 break;
 
             }
-            
+            boundKeyF(e);
             
         }
         std::cout << "Error in event queue" << SDL_GetError() << endl;
@@ -101,6 +152,8 @@ int main(int argc, char* args[]) {
 
         
     }
+
+    
     
 
     return 0;;
