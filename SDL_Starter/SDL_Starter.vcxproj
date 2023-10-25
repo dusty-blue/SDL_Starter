@@ -70,11 +70,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\VCLibs\SDL2_image-2.6.3\include;C:\VCLibs\SDL2-2.28.4\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\VCLibs\SDL2_image-2.6.3\include;C:\VCLibs\SDL2-2.28.4\include;C:\VCLibs\eigen;$(IncludePath)</IncludePath>
     <LibraryPath>C:\VCLibs\SDL2_image-2.6.3\lib\x64;C:\VCLibs\SDL2-2.28.4\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\VCLibs\SDL2_image-2.6.3\include;C:\VCLibs\SDL2-2.28.4\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\VCLibs\SDL2_image-2.6.3\include;C:\VCLibs\SDL2-2.28.4\include;C:\VCLibs\eigen;$(IncludePath)</IncludePath>
     <LibraryPath>C:\VCLibs\SDL2_image-2.6.3\lib\x64;C:\VCLibs\SDL2-2.28.4\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -132,12 +132,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MediaManager.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="WindowController.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MediaManager.h" />
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="WindowController.h" />
   </ItemGroup>

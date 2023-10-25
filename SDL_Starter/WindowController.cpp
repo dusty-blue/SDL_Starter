@@ -4,13 +4,15 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include <SDL_image.h>
+#include "Entity.h"
 
 WindowController::WindowController(int width, int height):SCREEN_WIDTH(width), SCREEN_HEIGHT(height)
 {   
     window = NULL;
     screenSurface = NULL;
     loadedImg = NULL;
-    hidden = false;
+
     window = SDL_CreateWindow("SDL Rules", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (window)
     {
@@ -52,10 +54,11 @@ SDL_Surface* WindowController::loadBMP(std::string mediaLocation)
     else {
         printf("Unable to load image %s! SDL Error: %s\n", mediaLocation.c_str(), SDL_GetError());
        //TO DO add default surface
-        std::cin.get();
+       exit(1);
     }
     
 }
+
 
 SDL_Surface* WindowController::loadSurface(std::string path) {
     SDL_Surface* surface = NULL;
@@ -65,10 +68,11 @@ SDL_Surface* WindowController::loadSurface(std::string path) {
         }
     else {
         printf("Unable to create converted surface. Error: %s\n", SDL_GetError());
-        //TO DO add default surface
-       std::cin.get();
+        
+       exit(1);
     }
 }
+
 
 SDL_Surface * WindowController::loadSurface(SDL_Surface * input)
 {
@@ -78,9 +82,8 @@ SDL_Surface * WindowController::loadSurface(SDL_Surface * input)
         return surface;
     }
     else {
-        printf("Unable to create converted surface. Error: %s\n", SDL_GetError());
-        //TO DO add default surface
-        std::cin.get();
+        printf("Unable to create converted surface. Error: %s\n", SDL_GetError());        
+        exit(1);
     }
     return nullptr;
 }
@@ -118,11 +121,39 @@ void WindowController::loadMedia(std::string path) {
     showSurface(loadSurface(path));
 }
 
-void WindowController::update() {
-    /*
-    Stub
-    */
 
+void WindowController::prepareRenderer(void) {
+    SDL_SetRenderDrawColor(renderer, 96, 128,255,255);
+    SDL_RenderClear(renderer);
+}
+
+
+void WindowController::update(Entity* obj) {
+    obj->updatePosition();
+    blit(obj->texture, obj->position.x(), obj->position.y());
+    SDL_RenderPresent(renderer);
+
+}
+
+SDL_Texture* WindowController::loadTexture(std::string path) {
+    SDL_Texture* newTexture = IMG_LoadTexture(renderer,path.c_str());
+    if (newTexture) {
+        return newTexture;
+    }
+    else {
+        printf("Failed to load Texture from file. SDL_Error: %s\n", SDL_GetError());
+        exit(1);
+    }
+}
+
+void WindowController::blit(SDL_Texture* texture, int x, int y) {
+    SDL_Rect dest;
+    dest.x =x;
+    dest.y = y;
+    SDL_QueryTexture(texture,NULL,NULL,&dest.w,&dest.h);
+    dest.w /=2;
+    dest.h /=2;
+    SDL_RenderCopy(renderer,texture,NULL,&dest);
 }
 
 void WindowController::closeWindow() {

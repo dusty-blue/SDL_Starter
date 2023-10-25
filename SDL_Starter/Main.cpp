@@ -7,7 +7,10 @@ using namespace std;
 #include <map>
 #include <SDL_image.h>
 #include <functional>
-#include "MediaManager.h"
+#include "Entity.h"
+
+#include <Eigen/Dense>
+
 
 void cleanUp() {
     std::cout<< "Let me just ge my broom...\n";
@@ -15,17 +18,17 @@ void cleanUp() {
     SDL_Quit();
 }
 
-bool init() {
+void init() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf("Video subsytem intialisation failed. SDL_Error: %s\n", SDL_GetError());
-        return false;
+        exit(1);
     }
     if (IMG_Init(IMG_INIT_PNG) == 0) {
         printf("Failed to intialise PNG library. SDL_Error %s\n",SDL_GetError());
-        return false;
+        exit(1);
     } 
     
-    return true;
+    
 }
 
 void printIK (int i, int k) {
@@ -42,58 +45,47 @@ void assignKeybind(SDL_Event e, SDL_KeyCode k) {
         printKey(k);
     }
 }
+
+
+
 int main(int argc, char* args[]) {
-    /*int a = 12;
-    cout<< to_string(a)<< "hi!" << '\n';
-    char input;
-    cin>>input;*/
-    std::atexit(cleanUp);
-    //auto customA =customFun(2);
-    int a = 5;
-    auto printI = [&a](auto b) { printIK(b, a);};
-    a =6;
-    printI(3);
+    
+    
     std::function<void()> printMe = [] {printKey(SDLK_u);};
-    
-    
-    
 
+    init();
+    std::atexit(cleanUp);
+    bool running = true;
 
-    if (!init()) {
-        printf("T_T i cry coz SDL_Error: %s\n", SDL_GetError());
-    } 
-    else {
-        std::map<int,WindowController*> ctrlMap;
-        WindowController winCtrl(640, 480);
-        ctrlMap.insert({winCtrl.windowID,&winCtrl});
-        MediaManager MediaManager;
-
-        //winCtrl.loadMedia("bitmap3.bmp");
-        winCtrl.showSurface(MediaManager.loadPNG("Pixil-Frame-1.png"));
-        /*WindowController winCtrl2(100,100);
-        ctrlMap.insert({winCtrl2.windowID,&winCtrl2});
+    std::map<int, WindowController*> ctrlMap;
+    WindowController winCtrl(640, 480);
+    ctrlMap.insert({ winCtrl.windowID,&winCtrl });
+    
+    Entity player;
+    
+    player.texture = winCtrl.loadTexture("Pixil-Frame-1.png");
+    SDL_Event e;
+    std::function<void(SDL_Event)> boundKeyF = [](SDL_Event e) {assignKeybind(e, SDLK_u); };
+    
         
-        winCtrl2.loadMedia("bitmap2.bmp");*/
-        struct Coords {
-            int x= 320;
-            int y = 240;
-        };
+    while(running) {
+        
+        
+        winCtrl.prepareRenderer();
+        const Eigen::Vector2d down = Eigen::Vector2d(0,1);
+        const Eigen::Vector2d up = Eigen::Vector2d(0, -1);
+        const Eigen::Vector2d left = Eigen::Vector2d(-1, 0);
+        const Eigen::Vector2d right = Eigen::Vector2d(1, 0);
 
-        Coords redCircleCoords;
-        winCtrl.showRedCircle(redCircleCoords.x,redCircleCoords.y);
-        SDL_Event e;
-        std::function<void(SDL_Event)> boundKeyF =[](SDL_Event e) {assignKeybind(e, SDLK_u);};
 
-        while (SDL_WaitEvent(&e) != 0) {
+        while (SDL_PollEvent(&e) != 0) {
             switch (e.type)
             {
             //default:
-            //    /*winCtrl.update();
-            //    winCtrl2.update();*/
-            //    break;
             
             case SDL_QUIT:
                 std::cout << "SDL_QUIT triggered\n";
+                running = false;
                 exit(0);
                 break;
             case SDL_MOUSEMOTION:
@@ -105,23 +97,18 @@ int main(int argc, char* args[]) {
                 switch (e.key.keysym.sym) {
                     case SDLK_w:
                     
-                    redCircleCoords.y -= 1;
-                    winCtrl.showRedCircle(redCircleCoords.x,redCircleCoords.y);
+                    player.velocity = up;
                     break;
                     case SDLK_s:
-                    redCircleCoords.y += 1;
-                    winCtrl.showRedCircle(redCircleCoords.x, redCircleCoords.y);
+                    player.velocity = down;
                     break;
                     case SDLK_d:
-                    redCircleCoords.x += 1;
-                    winCtrl.showRedCircle(redCircleCoords.x, redCircleCoords.y);
+                    player.velocity = right;
                     break;
                     case SDLK_a:
-                    redCircleCoords.x -= 1;
-                    winCtrl.showRedCircle(redCircleCoords.x, redCircleCoords.y);
+                    player.velocity = left;
                     break;
                     case SDLK_p:
-                    //printMe = [] {printKey(SDLK_i); };
                     boundKeyF = [](SDL_Event e) { assignKeybind(e,SDLK_i);};
                     break;
                     case SDLK_z:
@@ -141,20 +128,17 @@ int main(int argc, char* args[]) {
             boundKeyF(e);
             
         }
-        std::cout << "Error in event queue" << SDL_GetError() << endl;
-        
-        
-        
-        //WindowController winCtrl2(100,100);
-        
+        //std::cout << "Error in event queue" << SDL_GetError() << endl;
+                
         //multi windows?
+        winCtrl.update(&player);
         
-
+        SDL_Delay(16);
         
     }
 
     
     
 
-    return 0;;
+    return 0;
 }
