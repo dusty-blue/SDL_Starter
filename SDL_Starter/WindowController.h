@@ -24,7 +24,7 @@ public:
     /*Sets the render color and clears the render*/
     void prepareRenderer(void);
 
-    /*Takes and entity as an input and displays its texture at its position*/
+    /*Takes an entity as an input and displays its texture at its position*/
     void update(Entity* obj);
 
     /*Loads a Texture from the specified file path.*/
@@ -32,6 +32,7 @@ public:
     
     /*Destroys the window*/
     void closeWindow();
+    /*SDL Window ID*/
     int windowID;
 private:
     SDL_Window* window;

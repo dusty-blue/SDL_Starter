@@ -11,6 +11,9 @@ using namespace std;
 
 #include <Eigen/Dense>
 
+//test
+
+
 
 void cleanUp() {
     std::cout<< "Let me just ge my broom...\n";
@@ -31,10 +34,6 @@ void init() {
     
 }
 
-void printIK (int i, int k) {
-    std::cout << i << "+" << k << "=" << (k + i) << "\n";
-};
-
 void printKey(SDL_KeyCode k) {
     
     std::cout << SDL_GetKeyName(k) << " is great!\n";
@@ -47,7 +46,6 @@ void assignKeybind(SDL_Event e, SDL_KeyCode k) {
 }
 
 
-
 int main(int argc, char* args[]) {
     
     
@@ -58,7 +56,7 @@ int main(int argc, char* args[]) {
     bool running = true;
 
     std::map<int, WindowController*> ctrlMap;
-    WindowController winCtrl(640, 480);
+    WindowController winCtrl(512, 512);
     ctrlMap.insert({ winCtrl.windowID,&winCtrl });
     
     Entity player;
@@ -72,10 +70,10 @@ int main(int argc, char* args[]) {
         
         
         winCtrl.prepareRenderer();
-        const Eigen::Vector2d down = Eigen::Vector2d(0,1);
-        const Eigen::Vector2d up = Eigen::Vector2d(0, -1);
-        const Eigen::Vector2d left = Eigen::Vector2d(-1, 0);
-        const Eigen::Vector2d right = Eigen::Vector2d(1, 0);
+        const Eigen::Vector2<int> down = Eigen::Vector2<int>(0,2);
+        const Eigen::Vector2<int> up = Eigen::Vector2<int>(0, -2);
+        const Eigen::Vector2<int> left = Eigen::Vector2<int>(-2, 0);
+        const Eigen::Vector2<int> right = Eigen::Vector2<int>(2, 0);
 
 
         while (SDL_PollEvent(&e) != 0) {
@@ -136,9 +134,6 @@ int main(int argc, char* args[]) {
         SDL_Delay(16);
         
     }
-
-    
-    
 
     return 0;
 }

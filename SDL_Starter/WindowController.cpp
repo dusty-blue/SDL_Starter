@@ -130,6 +130,12 @@ void WindowController::prepareRenderer(void) {
 
 void WindowController::update(Entity* obj) {
     obj->updatePosition();
+    BodyPart* current;
+    current = &(obj->head);
+    while (current->next) {
+        blit(obj->texture, current->position.x(),current->position.y());
+        current = current->next;
+    }
     blit(obj->texture, obj->position.x(), obj->position.y());
     SDL_RenderPresent(renderer);
 
@@ -145,6 +151,7 @@ SDL_Texture* WindowController::loadTexture(std::string path) {
         exit(1);
     }
 }
+
 
 void WindowController::blit(SDL_Texture* texture, int x, int y) {
     SDL_Rect dest;
