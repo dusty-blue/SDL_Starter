@@ -128,8 +128,11 @@ void WindowController::prepareRenderer(void) {
 }
 
 
-void WindowController::update(Entity* obj) {
-    obj->updatePosition();
+void WindowController::update(TrailEntity* obj) {
+    //TO DO change heigh width to members
+    int h,w;
+    SDL_GetWindowSize(window,&h,&w);
+    obj->updatePosition(h, w);
     BodyPart* current;
     current = &(obj->head);
     while (current->next) {
@@ -139,6 +142,10 @@ void WindowController::update(Entity* obj) {
     blit(obj->texture, obj->position.x(), obj->position.y());
     SDL_RenderPresent(renderer);
 
+}
+
+void WindowController::update(GridEntity grid) {
+    
 }
 
 SDL_Texture* WindowController::loadTexture(std::string path) {

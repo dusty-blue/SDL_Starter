@@ -59,8 +59,10 @@ int main(int argc, char* args[]) {
     WindowController winCtrl(512, 512);
     ctrlMap.insert({ winCtrl.windowID,&winCtrl });
     
-    Entity player;
-    
+    TrailEntity player;
+    GridEntity grid(8,8,64);
+    grid.setGridCell(3,4, 64);
+
     player.texture = winCtrl.loadTexture("Pixil-Frame-1.png");
     SDL_Event e;
     std::function<void(SDL_Event)> boundKeyF = [](SDL_Event e) {assignKeybind(e, SDLK_u); };
@@ -113,8 +115,6 @@ int main(int argc, char* args[]) {
                     printMe();
                     break;
                 }
-
-
             case SDL_WINDOWEVENT:
                 if (e.window.event == SDL_WINDOWEVENT_CLOSE) {
                     ctrlMap[e.window.windowID]->closeWindow();

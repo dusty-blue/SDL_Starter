@@ -25,7 +25,9 @@ public:
     void prepareRenderer(void);
 
     /*Takes an entity as an input and displays its texture at its position*/
-    void update(Entity* obj);
+    void update(TrailEntity* obj);
+
+    void update(GridEntity grid);
 
     /*Loads a Texture from the specified file path.*/
     SDL_Texture * loadTexture(std::string path);
