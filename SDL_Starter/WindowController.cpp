@@ -134,10 +134,10 @@ void WindowController::update(TrailEntity* obj) {
     SDL_GetWindowSize(window,&h,&w);
     obj->updatePosition(h, w);
     BodyPart* current;
-    current = &(obj->head);
+    current = obj->head.get();
     while (current->next) {
         blit(obj->texture, current->position.x(),current->position.y());
-        current = current->next;
+        current = current->next.get();
     }
     blit(obj->texture, obj->position.x(), obj->position.y());
     SDL_RenderPresent(renderer);

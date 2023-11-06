@@ -1,9 +1,11 @@
 #pragma once
 #include <SDL.h>
 #include <Eigen/Core>
+#include <memory>
+
 struct BodyPart {
     Eigen::Vector2<int> position;
-    BodyPart* next;    
+    std::unique_ptr<BodyPart> next;
 } ;
 class Entity
 {
@@ -41,7 +43,7 @@ public:
     TrailEntity();
     ~TrailEntity();
     void updatePosition(int screenHeight, int screenWidth);
-    BodyPart head;
+    std::unique_ptr<BodyPart> head;
 protected:
     int length;
 };

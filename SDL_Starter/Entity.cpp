@@ -2,6 +2,7 @@
 #include <Eigen/Core>
 #include <Eigen/Sparse>
 #include <iostream>
+
 //
 //template<typename Func>
 //struct lambda_as_visitor_wrapper : Func {
@@ -47,21 +48,23 @@ int Entity::moduloHelper(int x, int d) {
 
 TrailEntity::TrailEntity() {
     length= 20;
-    head.position = position;
-    head.next = new BodyPart;
-    head.next->position = Eigen::Vector2<int>::Zero();
-    head.next->next = NULL;
-    BodyPart* current = &head;
+
+    auto push = [&head=head](Eigen::Vector2<int> pos) {
+        head = std::unique_ptr<BodyPart>(new BodyPart{pos, std::move(head)});
+    };
+
     for (int i = 0; i < length; i++) {
-        current->next = new BodyPart;
-        current = current->next;
-        current->position = Eigen::Vector2<int>::Zero();
-        current->next = NULL;
+        push(Eigen::Vector2<int>::Zero());
     }
 }
 
 TrailEntity::~TrailEntity()
 {
+    while (head) {
+        auto next = std::move(head->next);
+        head = std::move(next);
+    }
+    
 }
 
 /*
@@ -73,12 +76,12 @@ void TrailEntity::updatePosition(int screenHeight, int screenWidth) {
     position[0] = moduloHelper(position[0], screenWidth);
     position[1] = moduloHelper(position[1], screenHeight);
     
-    head.position = position;
-    BodyPart* current = &head;
+    head->position = position;
+    BodyPart* current = head.get();
     Eigen::Vector2<int> posPrev = current->position;
     Eigen::Vector2<int> posNext = current->position;
     while (current->next) {
-        current = current->next;
+        current = current->next.get();
         posNext = current->position;
         current->position = posPrev;
         posPrev = posNext;
