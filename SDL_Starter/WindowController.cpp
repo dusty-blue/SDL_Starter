@@ -144,8 +144,8 @@ void WindowController::update(TrailEntity* obj) {
 
 }
 
-void WindowController::update(GridEntity grid) {
-    
+void WindowController::update(GridEntity* grid) {
+    //grid->forAllCells(&blit);
 }
 
 SDL_Texture* WindowController::loadTexture(std::string path) {

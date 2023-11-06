@@ -1,6 +1,21 @@
 #include "Entity.h"
 #include <Eigen/Core>
+#include <Eigen/Sparse>
 #include <iostream>
+//
+//template<typename Func>
+//struct lambda_as_visitor_wrapper : Func {
+//    lambda_as_visitor_wrapper(const Func& f) : Func(f) {}
+//    template<typename S, typename I>
+//    void init(const S& v, I i, I j) { return Func::operator()(v, i, j); }
+//};
+//
+//template<typename Mat, typename Func>
+//void visit_lambda(const Mat& m, const Func& f)
+//{
+//    lambda_as_visitor_wrapper<Func> visitor(f);
+//    m.visit(visitor);
+//}
 
 Entity::Entity()
 {
@@ -68,8 +83,6 @@ void TrailEntity::updatePosition(int screenHeight, int screenWidth) {
         current->position = posPrev;
         posPrev = posNext;
     }
-
-
 }
 
 GridEntity::GridEntity() {
@@ -87,7 +100,12 @@ GridEntity::GridEntity(int cols, int rows, int cellSize) {
     this->grid = Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic>();
 
     grid.resize(cols,rows);
-    grid.Zero(cols,rows);
+    grid= grid.Zero(cols,rows);
+    
+    std::cout << grid << std::endl;
+    grid(3, 4) = 64;
+    grid(1, 1) = -1;
+
 
 }
 
@@ -100,4 +118,13 @@ void GridEntity::forAllCells(std::function<int(int)> func) {
     grid.unaryExpr(func);
     
 
+}
+
+void GridEntity::forAllCells(std::function<void(SDL_Texture* texture, int x, int y)>func) {
+    grid = Eigen::Matrix<int,Eigen::Dynamic,Eigen::Dynamic>::NullaryExpr(rows,cols,[&grid=grid,&cellSize = cellSize, &func = func, &texture = texture](Eigen::Index i, Eigen::Index j){
+        if (grid(i, j) > 0) {
+            func(texture, i*cellSize, j*cellSize);
+            return --grid(i,j);
+        }
+    });
 }

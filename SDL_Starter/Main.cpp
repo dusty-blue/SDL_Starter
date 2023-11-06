@@ -61,7 +61,9 @@ int main(int argc, char* args[]) {
     
     TrailEntity player;
     GridEntity grid(8,8,64);
-    grid.setGridCell(3,4, 64);
+    
+
+    
 
     player.texture = winCtrl.loadTexture("Pixil-Frame-1.png");
     SDL_Event e;

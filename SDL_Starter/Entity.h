@@ -15,6 +15,7 @@ public:
     Eigen::Vector2<int> velocity;
     void updatePosition(int screenHeight, int screenWidth);
     
+    
 protected:
     int moduloHelper(int x, int d);
     
@@ -27,6 +28,7 @@ public:
     GridEntity(int cols, int rows, int cellSize);
     void setGridCell(int x, int y, int value);
     void forAllCells(std::function<int(int)> func);
+    void forAllCells(std::function<void(SDL_Texture* texture, int x, int y)>func);
     private:
     Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic> grid;
     int cols,rows, cellSize;
