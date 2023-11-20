@@ -60,11 +60,10 @@ int main(int argc, char* args[]) {
     ctrlMap.insert({ winCtrl.windowID,&winCtrl });
     
     TrailEntity player;
-    GridEntity grid(8,8,64);
+    //GridEntity grid(8,8,64);
     
 
-    
-
+    player.Draw(winCtrl);
     player.texture = winCtrl.loadTexture("Pixil-Frame-1.png");
     SDL_Event e;
     std::function<void(SDL_Event)> boundKeyF = [](SDL_Event e) {assignKeybind(e, SDLK_u); };
@@ -74,10 +73,10 @@ int main(int argc, char* args[]) {
         
         
         winCtrl.prepareRenderer();
-        const Eigen::Vector2<int> down = Eigen::Vector2<int>(0,2);
-        const Eigen::Vector2<int> up = Eigen::Vector2<int>(0, -2);
-        const Eigen::Vector2<int> left = Eigen::Vector2<int>(-2, 0);
-        const Eigen::Vector2<int> right = Eigen::Vector2<int>(2, 0);
+        const Eigen::Vector2f down = Eigen::Vector2f(0,2);
+        const Eigen::Vector2f up = Eigen::Vector2f(0, -2);
+        const Eigen::Vector2f left = Eigen::Vector2f(-2, 0);
+        const Eigen::Vector2f right = Eigen::Vector2f(2, 0);
 
 
         while (SDL_PollEvent(&e) != 0) {
@@ -131,7 +130,8 @@ int main(int argc, char* args[]) {
         //std::cout << "Error in event queue" << SDL_GetError() << endl;
                 
         //multi windows?
-        winCtrl.update(&player);
+        //winCtrl.update(&player);
+        player.Draw(winCtrl);
         
         SDL_Delay(16);
         

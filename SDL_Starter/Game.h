@@ -14,7 +14,6 @@ public:
 
 private:
     GridEntity snake;
-    Entity treat;
     int snakeLength;
 };
 

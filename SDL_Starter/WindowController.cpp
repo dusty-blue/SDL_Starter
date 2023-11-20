@@ -127,26 +127,31 @@ void WindowController::prepareRenderer(void) {
     SDL_RenderClear(renderer);
 }
 
-
-void WindowController::update(TrailEntity* obj) {
-    //TO DO change heigh width to members
-    int h,w;
-    SDL_GetWindowSize(window,&h,&w);
-    obj->updatePosition(h, w);
-    BodyPart* current;
-    current = obj->head.get();
-    while (current->next) {
-        blit(obj->texture, current->position.x(),current->position.y());
-        current = current->next.get();
-    }
-    blit(obj->texture, obj->position.x(), obj->position.y());
-    SDL_RenderPresent(renderer);
-
+Eigen::Vector2i WindowController::getWindowSize() {
+    Eigen::Vector2i size;
+    SDL_GetWindowSize(window, &size[0], &size[1]);
+    return size;
 }
 
-void WindowController::update(GridEntity* grid) {
-    //grid->forAllCells(&blit);
+SDL_Renderer* WindowController::getRenderer() {
+    return renderer;
 }
+//void WindowController::update(TrailEntity* obj) {
+//    //TO DO change heigh width to members
+//    int h,w;
+//    SDL_GetWindowSize(window,&h,&w);
+//    obj->updatePosition(h, w);
+//    BodyPart* current;
+//    current = obj->head.get();
+//    while (current->next) {
+//        blit(obj->texture, current->position.x(),current->position.y());
+//        current = current->next.get();
+//    }
+//    blit(obj->texture, obj->position.x(), obj->position.y());
+//    SDL_RenderPresent(renderer);
+//
+//}
+
 
 SDL_Texture* WindowController::loadTexture(std::string path) {
     SDL_Texture* newTexture = IMG_LoadTexture(renderer,path.c_str());

@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
 #include <SDL.h>
-#include "Entity.h"
+#include <Eigen/Dense>
+//#include "Entity.h"
 class WindowController
 {
 public:
@@ -24,11 +25,11 @@ public:
     /*Sets the render color and clears the render*/
     void prepareRenderer(void);
 
+    SDL_Renderer * getRenderer();
+
     /*Takes an entity as an input and displays its texture at its position*/
-    void update(TrailEntity* obj);
-
-    void update(GridEntity* grid);
-
+    //void update(TrailEntity* obj);
+    
     /*Loads a Texture from the specified file path.*/
     SDL_Texture * loadTexture(std::string path);
     
@@ -36,6 +37,8 @@ public:
     void closeWindow();
     /*SDL Window ID*/
     int windowID;
+
+    Eigen::Vector2i getWindowSize(); 
 private:
     SDL_Window* window;
     SDL_Surface* screenSurface;
