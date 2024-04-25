@@ -64,7 +64,7 @@ int main(int argc, char* args[]) {
     
 
     player.Draw(winCtrl);
-    player.texture = winCtrl.loadTexture("Pixil-Frame-1.png");
+    player.texture = winCtrl.loadTexture("Pixil-Frame-small.png");
     SDL_Event e;
     std::function<void(SDL_Event)> boundKeyF = [](SDL_Event e) {assignKeybind(e, SDLK_u); };
     

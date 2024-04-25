@@ -74,6 +74,12 @@ void Entity::blit(SDL_Renderer* renderer, int x , int y,int s) {
     dest.h *= s;
     SDL_RenderCopy(renderer, this->texture, NULL, &dest);
 }
+
+SDL_Point Entity::GetTextureSize() {
+    SDL_Point size;
+    SDL_QueryTexture(this->texture, NULL, NULL, &size.x, &size.y);
+    return size;
+}
 TrailEntity::TrailEntity() {
     length= 4;
 
@@ -127,7 +133,7 @@ void TrailEntity::updatePosition(int screenHeight, int screenWidth) {
 
         posNext = current->position;
         dist = (posNext - posPrev).norm();
-        current->position += (posPrev- posNext).normalized() *(tanh(dist - 126.0) + 1.0);
+        current->position += (posPrev- posNext).normalized() *(tanh(dist - this->GetTextureSize().x) + 1.0);
         posPrev = current->position;
         current = current->next.get();
         

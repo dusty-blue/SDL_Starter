@@ -30,6 +30,8 @@ public:
 
     void blit(SDL_Renderer* renderer, int x, int y, int s);
 
+    SDL_Point GetTextureSize();
+
     
 protected:
     int moduloHelper(int x, int d);
