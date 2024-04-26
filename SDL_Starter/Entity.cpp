@@ -23,6 +23,7 @@
 Entity::Entity()
 {
     texture = NULL;
+    parent = NULL;
     position = Eigen::Vector2f::Zero();
 
 }
@@ -109,7 +110,7 @@ void TrailEntity::Draw(WindowController& winCtrl) {
     BodyPart* current;
     current = this->head.get();
     while (current) {
-        this->blit(winCtrl.getRenderer(), static_cast<int>(current->position.x()), static_cast<float>(current->position.y()),1);
+        this->blit(winCtrl.getRenderer(), static_cast<int>(moduloHelper( current->position.x(), static_cast<float>(winSize.y()))), static_cast<int>(moduloHelper(current->position.y(), static_cast<float>(winSize.x()))),1);
         current = current->next.get();
     }
     blit(winCtrl.getRenderer(), 1);
@@ -121,8 +122,8 @@ Adds velocity to position. Wraps position to screen boundaries
 void TrailEntity::updatePosition(int screenHeight, int screenWidth) {
     position += velocity;
 
-    position[0] = moduloHelper(position[0], static_cast<float>(screenWidth));
-    position[1] = moduloHelper(position[1], static_cast<float>(screenHeight));
+    //position[0] = moduloHelper(position[0], static_cast<float>(screenWidth));
+    //position[1] = moduloHelper(position[1], static_cast<float>(screenHeight));
     
     head->position = position;
     BodyPart* current = head->next.get();
