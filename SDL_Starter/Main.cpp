@@ -1,4 +1,6 @@
 #include <stdio.h>
+
+#include "single_random_entity.h"
 using namespace std;
 #include <iostream>
 #include <string>
@@ -62,11 +64,18 @@ int main(int argc, char* args[]) {
     TrailEntity player;
     //GridEntity grid(8,8,64);
     
+    //TO DO : Change background Color
+    single_random_entity treat(winCtrl.getWindowSize().x(), winCtrl.getWindowSize().y());
+    treat.Draw(winCtrl);
+	treat.texture = winCtrl.loadTexture(("RainbowBucket_small.png"));
+    
 
     player.Draw(winCtrl);
     player.texture = winCtrl.loadTexture("Pixil-Frame-small.png");
     SDL_Event e;
     std::function<void(SDL_Event)> boundKeyF = [](SDL_Event e) {assignKeybind(e, SDLK_u); };
+    
+
     
         
     while(running) {
@@ -115,6 +124,9 @@ int main(int argc, char* args[]) {
                     case SDLK_z:
                     printMe();
                     break;
+					case SDLK_t:
+					player.increaseLength(1);
+                    break;
                 }
             case SDL_WINDOWEVENT:
                 if (e.window.event == SDL_WINDOWEVENT_CLOSE) {
@@ -127,11 +139,18 @@ int main(int argc, char* args[]) {
             boundKeyF(e);
             
         }
+        if((treat.position - player.position).norm()<64)
+        {
+            player.increaseLength(1);
+            treat.NewRandomLocation();
+        }
         //std::cout << "Error in event queue" << SDL_GetError() << endl;
                 
         //multi windows?
         //winCtrl.update(&player);
+        treat.Draw(winCtrl);
         player.Draw(winCtrl);
+        SDL_RenderPresent(winCtrl.getRenderer());
         
         SDL_Delay(16);
         

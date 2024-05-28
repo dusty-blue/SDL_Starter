@@ -135,12 +135,14 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="single_random_entity.cpp" />
     <ClCompile Include="WindowController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="single_random_entity.h" />
     <ClInclude Include="WindowController.h" />
   </ItemGroup>
   <ItemGroup>

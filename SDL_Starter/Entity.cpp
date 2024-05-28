@@ -63,7 +63,10 @@ void Entity::blit(SDL_Renderer* renderer, int s) {
     SDL_QueryTexture(this->texture, NULL, NULL, &dest.w, &dest.h);
     dest.w *= s;
     dest.h *= s;
-    SDL_RenderCopy(renderer,this-> texture, NULL, &dest);
+    if(SDL_RenderCopy(renderer,this-> texture, NULL, &dest)<0)
+    {
+        std::cout << SDL_GetError() << std::endl;
+    }
 }
 
 void Entity::blit(SDL_Renderer* renderer, int x , int y,int s) {
@@ -82,7 +85,7 @@ SDL_Point Entity::GetTextureSize() {
     return size;
 }
 TrailEntity::TrailEntity() {
-    length= 4;
+    length= 1;
 
     auto push = [&head=head](Eigen::Vector2f pos) {
         head = std::unique_ptr<BodyPart>(new BodyPart{pos, std::move(head)});
@@ -114,7 +117,6 @@ void TrailEntity::Draw(WindowController& winCtrl) {
         current = current->next.get();
     }
     blit(winCtrl.getRenderer(), 1);
-    SDL_RenderPresent(winCtrl.getRenderer());
 }
 /*
 Adds velocity to position. Wraps position to screen boundaries
@@ -138,6 +140,17 @@ void TrailEntity::updatePosition(int screenHeight, int screenWidth) {
         posPrev = current->position;
         current = current->next.get();
         
+    }
+}
+
+
+void TrailEntity::increaseLength(int inc)
+{
+    auto push = [&head = head](Eigen::Vector2f pos) {
+        head = std::unique_ptr<BodyPart>(new BodyPart{ pos, std::move(head) });
+        };
+    for (int i = 0; i < inc; i++) {
+        push(Eigen::Vector2f::Zero());
     }
 }
 

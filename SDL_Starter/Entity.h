@@ -74,6 +74,7 @@ public:
     ~TrailEntity();
     void Draw(WindowController& renderer);
     void updatePosition(int screenHeight, int screenWidth);
+    void increaseLength(int inc);
     std::unique_ptr<BodyPart> head;
 protected:
     int length;
