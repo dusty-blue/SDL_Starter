@@ -1,1 +1,1 @@
-SDL Learning Project on how to make a game engine in SDL.
+ wanted to deepen my understanding of game engines.  This is a simple snake inspired game where as you eat food palettes you grow in length. I also experimented with how to set up dynamic keyboard control schemes.  I used SDL to create a 2D rendering context. The program runs through an update loop which checks for user input. I created a simple entity system to handle game objects. Smart pointers are used to handle ownership of the entities. 
